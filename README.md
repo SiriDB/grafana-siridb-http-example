@@ -3,17 +3,23 @@
 This is a tutorial on how to setup SiriDB including a replica and a grafana dashboad.
 
 at least version 2.0.14
-> siridb-server --version
+```
+siridb-server --version
+```
 
 at least version 1.1.2
-> siridb-admin --version
+```
+siridb-admin --version
+```
 
 at least 2.0.3
-> siridb-http --version
+```
+siridb-http --version
+```
 
 create config files for siridb:
 ```
-> for i in {0..1}; do `cat <<EOT > siridb$i.conf
+for i in {0..1}; do `cat <<EOT > siridb$i.conf
 [siridb]
 listen_client_port = 900$i
 server_name = %HOSTNAME:901$i
@@ -27,21 +33,23 @@ EOT` && mkdir dbpath$i; done
 
 start siridb
 ```
-> siridb-server -c siridb0.conf &
+siridb-server -c siridb0.conf &
 ```
 
 ```
-> siridb-server -c siridb1.conf &
+siridb-server -c siridb1.conf &
 ```
 
 time to add a database:
 
 ```
-> siridb-admin -u sa -p siri -s localhost:9000 new-database -d dbtest -t "s"
+siridb-admin -u sa -p siri -s localhost:9000 new-database -d dbtest -t="s" --duration-num="12w"
 ```
 
 create a replica
-> siridb-admin -u sa -p siri -s localhost:9001 new-replica -d dbtest -U iris -P siri -S localhost:9000 --pool 0 --force
+```
+siridb-admin -u sa -p siri -s localhost:9001 new-replica -d dbtest -U iris -P siri -S localhost:9000 --pool 0 --force
+```
 
 insert data...
 for this demo we create a Python script.
