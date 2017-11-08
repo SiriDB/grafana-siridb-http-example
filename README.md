@@ -1,4 +1,5 @@
 # Grafana SiriDB HTTP example
+The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin.
 
 This is a tutorial on how to setup SiriDB including a replica and a grafana dashboad.
 
@@ -19,7 +20,7 @@ siridb-http --version
 
 create config files for siridb:
 ```
-for i in {0..1}; do `cat <<EOT > siridb$i.conf
+for i in {0..3}; do `cat <<EOT > siridb$i.conf
 [siridb]
 listen_client_port = 900$i
 server_name = %HOSTNAME:901$i
@@ -40,10 +41,9 @@ siridb-server -c siridb0.conf &
 siridb-server -c siridb1.conf &
 ```
 
-time to add a database:
-
+Create a database:
 ```
-siridb-admin -u sa -p siri -s localhost:9000 new-database -d dbtest -t="s" --duration-num="12w"
+siridb-admin -u sa -p siri -s localhost:9000 new-database -d dbtest -t "s" --duration-num "40w"
 ```
 
 create a replica
@@ -51,17 +51,22 @@ create a replica
 siridb-admin -u sa -p siri -s localhost:9001 new-replica -d dbtest -U iris -P siri -S localhost:9000 --pool 0 --force
 ```
 
-insert data...
-for this demo we create a Python script.
+or create a pool
+```
+siridb-admin -u sa -p siri -s localhost:9001 new-pool -d dbtest -U iris -P siri -S localhost:9000 --force
+```
 
-reqiurements:
+insert data...
+for this demo we create a Python3 script.
+
+requirements:
 ```
 pip3 install siridb-connector
 pip3 install psutil
 ```
 
 ```
-./mon2siridb.py -u iris -p siri -d dbtest -n 0 -i 5 -t s -s localhost:9000,localhost:9001 &
+python3 mon2siridb.py -u iris -p siri -d dbtest -n 0 -i 5 -t s -s localhost:9000,localhost:9001 &
 ```
 
 create siridb http configuration file: (make sure to enable basic authentication)
@@ -86,9 +91,18 @@ insert_timeout = 60
 EOT
 ```
 
-
-start siridb-http
+Start siridb-http
 ```
 siridb-http -c siridb-http.conf &
 ```
 
+
+```
+create group `received` for /siridb-server.*received_points/
+create group `selected` for /siridb-server.*selected_points/
+create group `mem_usage` for /siridb-server.*mem_usage/
+create group `uptime` for /siridb-server.*uptime/
+create group `series` for /siridb-database.*series/
+create group `points` for /siridb-database.*points/
+
+```

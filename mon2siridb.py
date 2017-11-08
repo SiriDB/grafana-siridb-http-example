@@ -42,6 +42,27 @@ def getts(time_precision):
     }[time_precision](time.time())
 
 
+async def addsiridbdata(data, cluster, args):
+    res = await cluster.query(
+        'list servers name, '
+        'mem_usage, received_points, selected_points, uptime')
+    ts = getts(args.time_precision)
+    servers = res['servers']
+    for server in servers:
+        name = server[0]
+        for i, col in enumerate(res['columns'][1:], start=1):
+            series = 'siridb-server-{}-{}'.format(name, col)
+            data[series] = [[ts, server[i]]]
+
+    res = await cluster.query('count series')
+    data['siridb-database-{}-series'.format(args.database)] = \
+        [[ts, res['series']]]
+
+    res = await cluster.query('count series length')
+    data['siridb-database-{}-points'.format(args.database)] = \
+        [[ts, res['series_length']]]
+
+
 async def monitor(cluster, args):
     await cluster.connect()
 
@@ -52,7 +73,7 @@ async def monitor(cluster, args):
         while count:
             data = {}
             ts = getts(args.time_precision)
-            
+
             adddata(data, prefix, ts, 'cpu_percent', interval=args.interval)
             adddata(data, prefix, ts, 'virtual_memory', props=[
                 'available',
@@ -81,6 +102,7 @@ async def monitor(cluster, args):
                 'dropin',
                 'dropout'])
 
+            await addsiridbdata(data, cluster, args)
             logging.info('Inserting {} series...'.format(len(data)))
             await cluster.insert(data)
             await asyncio.sleep(args.interval)
@@ -144,10 +166,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     cluster = SiriDBClient(
-        username='iris',
-        password='siri',
-        dbname='dbtest',
-        hostlist=[server.split(':') for server in  args.servers.split(',')])
+        username=args.user,
+        password=args.password,
+        dbname=args.database,
+        hostlist=[server.split(':') for server in args.servers.split(',')])
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(monitor(cluster, args))
