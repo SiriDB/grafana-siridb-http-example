@@ -217,7 +217,7 @@ Click on the new ***Panel title*** -> ***edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
-Fill in `/.*disk_io_counters_read_bytes/` as *select*, choose *max* as aggregation and select *diffps*.
+At ***select*** fill in `/.*disk_io_counters_read_bytes/`, choose ***max*** as aggregation and enable ***diffps***.
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=1)
 
