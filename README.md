@@ -73,13 +73,16 @@ for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 > Tip: you can view the output from a siridb process by using for example `cat siridb0.log` or `tail -f siridb0.log`.
 
 Now we need the SiriDB Admin tool to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
-For our tutorial we only need a database with `second` precision so we should add the `-t` flag. If you want to learn more about the
-admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
+For our tutorial we only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this databae
+because our measurement interval will be only a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day
+in which case your database will perform better by using a larger shard duration.
 
-This command creates the database on the first siridb server:
+> Note: If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
+
+Create the database on the first siridb server:
 
 ```
-siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s"
+siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration "6h"
 ```
 
 Now we have a database and we can use the default database user `iris` with password `siri` to extend the database
