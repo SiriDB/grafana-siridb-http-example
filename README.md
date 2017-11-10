@@ -166,7 +166,7 @@ From the menu, click on ***Dashboards*** -> ***Import***
 
 ![alt Grafana menu dashboard import](/png/grafana-menu-dashboard-import.png?raw=true)
 
-Click on ***Upload JSON*** and select the `tutorial-dashboard.json` from this folder.
+Click on ***Upload .json File*** and select the `tutorial-dashboard.json` from this folder.
 On the next window you should choose the SiriDB HTTP data source.
 
 ![alt Grafana import dashboard](/png/grafana-import-dashboard.png?raw=true)
