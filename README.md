@@ -1,4 +1,4 @@
-# Grafana and SiriDB tutorial
+# Using Grafana with SiriDB
 
 The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For a nice dashboard we need some data which we can viaualize.
 In this tutorial we use a Python script which collects some cpu, disp and memory data from the localhost and some imformation about the the running
