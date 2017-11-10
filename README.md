@@ -93,7 +93,7 @@ siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -
 
 Ok, everything is ready to collect data (we configure the other two SiriDB servers later in this tutorial). Before starting the Python script to collect data we must install its dependencies:
 ```
-pip3 install siridb-connector psutil
+sudo pip3 install siridb-connector psutil
 ```
 
 Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this toturial then the defaults should be fine.
