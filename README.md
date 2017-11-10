@@ -156,7 +156,7 @@ Open a browser and go to http://localhost:3000. You should see the following pag
 
 Sign-in by using username `admin` and password `admin`.
 
-Click on ***Add data source*** to create the SiriDB data source. Fill in the form like below:
+Click on ***Add data source*** to create the SiriDB data source. Fill in the form like below (use `siri` as password):
 
 ![alt Grafana add data source](/png/grafana-add-data-source.png?raw=true)
 
