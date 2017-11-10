@@ -1,15 +1,15 @@
-# Grafana SiriDB HTTP example
+# Grafana and SiriDB tutorial
 
 The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For a nice dashboard we need some data which we can viaualize.
 In this tutorial we use a Python script which collects some data about the host and the running SiriDB processes. This data will be stored in
-a SiriDB database and by using a Grafana Dashboard we should be able to monitor the data.
+a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
-First we should install all requirements. During the following steps we download and install al requirements. We use a fresh Ubnutu 16.04
-installation so you might want to skip some steps or change some steps according to your operating system.
+We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
 
-Update and install Git, Pip and libuv1 which is a SiriDB dependency
+Update and install Git, Pip and libuv1 by using apt.
 ```
-sudo apt update && sudo apt upgrade
+sudo apt update
+sudo apt upgrade
 sudo apt install libuv1 git python3-pip
 ```
 
@@ -99,8 +99,7 @@ Start the script. The script accepts arguments which can be viewed with `python3
 python3 mon2siridb.py > mon.log &
 ```
 
-
-Yeah, we have a database and data! Let's setup Grafana so we can view what we are collecting. First install Grafana:
+Let's setup Grafana so we can view what we are collecting. First install Grafana:
 ```
 wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.6.1_amd64.deb
 sudo dpkg -i grafana_4.6.1_amd64.deb
@@ -150,6 +149,21 @@ siridb-http -c siridb-http.conf > siridb-http.log &
 ```
 
 Open a browser and go to http://localhost:3000. You should see the following page:
+![alt Grafana login](/grafana-login.png?raw=true)
+
+Sign-in by using username `admin` and password `admin`.
+
+Click on 'New datasource' to create the SiriDB data source. Fill in the form like below:
+![alt Grafana add data source](/grafana-add-data-source.png?raw=true)
+
+Clicking on 'Save and test' should return message that everyting is working!
+
+From the menu, click on 'import a dashboard'
+![alt Grafana menu dashboard import](/grafana-menu-dashboard-import.png?raw=true)
+
+Click on 'Upload JSON' and select the 'tutorial-dashboard.json' from this folder.
+On the next window you should choose the SiriDB HTTP data source.
+![alt Grafana import dashboard](/grafana-import-dashboard.png?raw=true)
 
 
 
