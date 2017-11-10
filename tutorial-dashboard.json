@@ -1,8 +1,8 @@
 {
   "__inputs": [
     {
-      "name": "DS_SIRIDB-HTTP",
-      "label": "SiriDB-HTTP",
+      "name": "DS_SIRIDB_HTTP",
+      "label": "SiriDB HTTP",
       "description": "",
       "type": "datasource",
       "pluginId": "grafana-siridb-http-datasource",
@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "4.4.1"
+      "version": "4.6.1"
     },
     {
       "type": "datasource",
@@ -36,7 +36,17 @@
     }
   ],
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "description": "SiriDB Test Dashboard",
   "editable": true,
@@ -49,14 +59,14 @@
   "rows": [
     {
       "collapse": false,
-      "height": 187,
+      "height": 188,
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -141,7 +151,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fill": 1,
           "id": 5,
           "legend": {
@@ -224,14 +234,14 @@
     },
     {
       "collapse": false,
-      "height": 186,
+      "height": 174,
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -307,7 +317,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fill": 1,
           "id": 3,
           "legend": {
@@ -385,7 +395,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fill": 1,
           "id": 4,
           "legend": {
@@ -474,14 +484,14 @@
     },
     {
       "collapse": false,
-      "height": 168,
+      "height": 192,
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Received points during uptime",
           "fill": 1,
           "id": 7,
@@ -561,7 +571,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Selected points during uptime",
           "fill": 1,
           "id": 8,
@@ -641,7 +651,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Up-time counter",
           "fill": 1,
           "id": 9,
@@ -721,7 +731,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Memory Usage of the SiriDB process",
           "fill": 1,
           "id": 10,
@@ -806,14 +816,14 @@
     },
     {
       "collapse": false,
-      "height": 177,
+      "height": 173,
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Number of series in each database",
           "fill": 1,
           "id": 11,
@@ -893,7 +903,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB-HTTP}",
+          "datasource": "${DS_SIRIDB_HTTP}",
           "description": "Number of points in each database",
           "fill": 1,
           "id": 12,
@@ -979,10 +989,11 @@
     },
     {
       "collapse": false,
-      "height": 161,
+      "height": 194,
       "panels": [
         {
           "columns": [],
+          "datasource": "${DS_SIRIDB_HTTP}",
           "fontSize": "100%",
           "id": 6,
           "links": [],
@@ -1111,5 +1122,5 @@
   },
   "timezone": "",
   "title": "Tutorial Dashboard",
-  "version": 49
+  "version": 3
 }

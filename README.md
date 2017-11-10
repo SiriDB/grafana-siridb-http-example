@@ -165,31 +165,26 @@ Click on 'Upload JSON' and select the 'tutorial-dashboard.json' from this folder
 On the next window you should choose the SiriDB HTTP data source.
 ![alt Grafana import dashboard](/grafana-import-dashboard.png?raw=true)
 
+After clicking on 'Import' you shout see a dashboard similar to this:
+![alt Grafana tutorial dashboard](/grafana-tutorial-dashboard.png?raw=true)
 
-
-create a replica
-```
-siridb-admin -u sa -p siri -s localhost:9001 new-replica -d dbtest -U iris -P siri -S localhost:9000 --pool 0 --force
-```
-
-or create a pool
-```
-siridb-admin -u sa -p siri -s localhost:9001 new-pool -d dbtest -U iris -P siri -S localhost:9000 --force
-```
-
-insert data...
-for this demo we create a Python3 script.
-
-requirements:
-```
-pip3 install siridb-connector
-pip3 install psutil
-```
+We can now continue by expanding the database with another pool.
 
 ```
-python3 mon2siridb.py -u iris -p siri -d dbtest -n 0 -i 5 -t s -s localhost:9000 &>/dev/null &
+siridb-admin -u sa -p siri -s localhost:9002 new-pool -d tutorialdb -U iris -P siri -S localhost:9000 --force
 ```
 
-create siridb http configuration file: (make sure to enable basic authentication)
+In the dashboard you should see the new server. The status for the existing servers includes 're-indexing' while
+the series are spread across the pools.
+![alt Grafana re-indexing](/grafana-re-indexing.png?raw=true)
+
+Wait until the status for all three server is just 'running' and then create another replica on the fourth server for `pool 1`:
+```
+siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 1 --force
+```
+
+The dashboard should show the forth server with status 'synchronizing'
+![alt Grafana synchronizing](/grafana-synchronizing.png?raw=true)
+
 
 

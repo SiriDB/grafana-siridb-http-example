@@ -12,6 +12,7 @@ import asyncio
 import socket
 import logging
 from siridb.connector import SiriDBClient
+from siridb.connector.lib.exceptions import QueryError
 
 
 logging.basicConfig(level=logging.DEBUG)
