@@ -196,9 +196,9 @@ The dashboard should show the forth server with status ***synchronizing***
 ![alt Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
 
 From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
-As an example we will add two extra graphs for minotoring disk IO.
+As an example we will add two extra graphs for Disk IO counters.
 
-It might be helpful to test SiriDB queries. This can be done easy by using the running SiriDB HTTP webserver.
+It might be helpful to test SiriDB queries. We can do this by using the running SiriDB HTTP webserver.
 
 Go to http://localhost:5050. You should see the following screen:
 
@@ -212,12 +212,12 @@ Now you have a prompt available where you can test queries, for example:
 
 ![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
-Go Back to Grafana and click on ***Add row*** -> ***Graph***.
-Click on the new ***Panel title*** -> ***edit***.
+Go back to Grafana and click on ***Add row*** -> ***Graph***.
+Click on the new ***Panel title*** and click on ***edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
-At ***select*** fill in `/.*disk_io_counters_read_bytes/`, choose ***max*** as aggregation and enable ***diffps***.
+At ***select*** fill in `/.*disk_io_counters_read_bytes/`, choose ***max*** as aggregation and enable ***Diffps***.
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=1)
 
