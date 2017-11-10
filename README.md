@@ -98,7 +98,7 @@ sudo pip3 install siridb-connector psutil
 
 Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this toturial then the defaults should be fine.
 ```
-python3 mon2siridb.py > mon.log &
+python3 mon2siridb.py &> mon.log &
 ```
 
 Let's setup Grafana so we can view what we are collecting. First install Grafana:
