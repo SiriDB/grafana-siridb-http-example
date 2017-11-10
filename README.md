@@ -82,7 +82,7 @@ in which case your database will perform better by using a larger shard duration
 Create the database on the first siridb server which is running on port `9000`:
 
 ```
-siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration "6h"
+siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration-num "6h"
 ```
 
 Now we have a database and we can use the default database user `iris` with password `siri` to extend the database
