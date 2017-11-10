@@ -223,7 +223,7 @@ Now fill in `/.*disk_io_counters_read_bytes/` at 'select', choose 'max' as aggre
 On the General tab you can change the panel title to 'Disk IO counters (read bytes)'
 Repeat this steps for the write counters and then you should have the following result:
 
-![alt Grafana disk io counters bytes](/grafana-add-read-bytes?raw=true)
+![alt Grafana disk io counters bytes](/grafana-add-read-bytes.png?raw=true)
 
 I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
 
