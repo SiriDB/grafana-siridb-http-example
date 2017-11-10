@@ -1,8 +1,8 @@
 # Grafana and SiriDB tutorial
 
 The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For a nice dashboard we need some data which we can viaualize.
-In this tutorial we use a Python script which collects some data about the host and the running SiriDB processes. This data will be stored in
-a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
+In this tutorial we use a Python script which collects some cpu, disp and memory data from the localhost and some imformation about the the running
+SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
 
@@ -13,13 +13,13 @@ sudo apt upgrade
 sudo apt install libuv1 git python3-pip
 ```
 
-We start with getting this documentation and Python script wight are made available in a git repository
+We start by downloading the Python script (and this tutorial):
 ```
 git clone https://github.com/transceptor-technology/grafana-siridb-http-example.git
 cd ./grafana-siridb-http-example
 ```
 
-Install SiriDB Server
+Next we install SiriDB:
 ```
 wget https://github.com/transceptor-technology/siridb-server/releases/download/2.0.25/siridb-server_2.0.25_amd64.deb
 sudo dpkg -i siridb-server_2.0.25_amd64.deb
@@ -30,7 +30,7 @@ We don't require SiriDB to start at startup so we disable the service:
 sudo systemctl disable siridb-server.service
 ```
 
-SiriDB has an admin tool which can be used to create and manage databases so we should install that tool:
+SiriDB has an admin tool which can be used to create and manage databases:
 ```
 wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.2/siridb-admin_1.1.2_linux_amd64.bin
 chmod +x siridb-admin_1.1.2_linux_amd64.bin
@@ -49,7 +49,7 @@ sudo ln -s /usr/local/bin/siridb-http_2.0.4_linux_amd64.bin /usr/local/bin/sirid
 
 SiriDB can scale data accross multiple pools and each pool can have two servers for redundancy. We can play with this
 concept on a single host by running SiriDB multiple times using different ports. In a real scenario you should use
-different nodes but for now we will create four SiriDB nodes and setup two pools, each with two SiriDB "servers".
+different nodes but for now we will create four SiriDB nodes and setup two pools, each with two SiriDB servers.
 
 This will create four SiriDB configuration files:
 ```
@@ -65,7 +65,7 @@ max_open_files = 512
 EOT` && mkdir dbpath$i; done
 ```
 
-We can start the siridb servers! The following command start the four SiriDB server in the background.
+We can start the siridb servers! The following command starts the four SiriDB servers in the background.
 ```
 for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 ```
