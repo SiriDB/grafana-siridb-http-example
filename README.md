@@ -1,7 +1,7 @@
 # Using Grafana with SiriDB
 
-The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For a nice dashboard we need some data which we can viaualize.
-In this tutorial we use a Python script which collects some cpu, disp and memory data from the localhost and some imformation about the the running
+The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For an attractive dashboard we need some data which we can visualize.
+In this tutorial we use a Python script which collects some cpu, disp and memory data from the localhost and some imformation about the running
 SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
@@ -65,12 +65,12 @@ max_open_files = 512
 EOT` && mkdir dbpath$i; done
 ```
 
-We can start the siridb servers! The following command starts the four SiriDB servers in the background.
+We can start the SiriDB servers! The following command starts the four SiriDB servers in the background.
 ```
 for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 ```
 
-> Tip: you can view the output from a siridb process by using for example `cat siridb0.log` or `tail -f siridb0.log`.
+> Hint: you can view the output from a SiriDB process by using for example `cat siridb0.log` or `tail -f siridb0.log`.
 
 Now we need the SiriDB Admin tool to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
 For our tutorial we only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this databae
@@ -79,7 +79,7 @@ in which case your database will perform better by using a larger shard duration
 
 > If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
 
-Create the database on the first siridb server which is running on port `9000`:
+Create the database on the first SiriDB server which is running on port `9000`:
 
 ```
 siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration-num "6h"
@@ -123,7 +123,7 @@ SiriDB HTTP requires a configuration file. For more information you can view the
 https://github.com/transceptor-technology/siridb-http#readme
 
 This will create a basic configuration file which is fine for our tutorial. Note that we connect
-to both to the first and second siridb server for redundancy.
+to both to the first and second SiriDB server for redundancy.
 ```
 cat <<EOT > siridb-http.conf
 [Database]
