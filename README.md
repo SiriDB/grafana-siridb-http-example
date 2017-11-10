@@ -160,7 +160,7 @@ Click on 'New datasource' to create the SiriDB data source. Fill in the form lik
 
 Clicking on 'Save and test' should return message that everyting is working!
 
-From the menu, click on 'import a dashboard'
+From the menu, click on 'Dashboards -> Import'
 
 ![alt Grafana menu dashboard import](/grafana-menu-dashboard-import.png?raw=true)
 
@@ -171,7 +171,7 @@ On the next window you should choose the SiriDB HTTP data source.
 
 After clicking on 'Import' you shout see a dashboard similar to this:
 
-![alt Grafana tutorial dashboard](/grafana-tutorial-dashboard.png?raw=true)
+![alt Grafana tutorial dashboard](/grafana-tutorial-dashboard.png?raw=true&v=1)
 
 We can now continue by expanding the database with another pool.
 
