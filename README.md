@@ -77,7 +77,7 @@ For our tutorial we only need a database with `second` precision so we add the `
 because our measurement interval will be only a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day
 in which case your database will perform better by using a larger shard duration.
 
-> Note: If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
+> If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
 
 Create the database on the first siridb server:
 
@@ -196,4 +196,22 @@ The dashboard should show the forth server with status 'synchronizing'
 ![alt Grafana synchronizing](/grafana-synchronizing.png?raw=true)
 
 From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
+
+It might be helpful to test some SiriDB queries. This can be done easy by using the running SiriDB HTTP webserver.
+
+> As an alternative for running wueries you could also use [SiriDB prompt](https://github.com/transceptor-technology/siridb-prompt#readme)
+
+Go to http://localhost:5050. You should see the following screen:
+
+![alt SiriDB HTTP login](/siridb-http-login.png?raw=true)
+
+Login using the default user `iris` with password `siri`.
+
+Now you have a prompt available where you can test you queries:
+
+![alt SiriDB HTTP list series](/siridb-http-list-series.png?raw=true)
+
+![alt SiriDB HTTP select](/siridb-http-select.png?raw=true)
+
+I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
 
