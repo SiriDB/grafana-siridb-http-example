@@ -149,23 +149,28 @@ siridb-http -c siridb-http.conf > siridb-http.log &
 ```
 
 Open a browser and go to http://localhost:3000. You should see the following page:
+
 ![alt Grafana login](/grafana-login.png?raw=true)
 
 Sign-in by using username `admin` and password `admin`.
 
 Click on 'New datasource' to create the SiriDB data source. Fill in the form like below:
+
 ![alt Grafana add data source](/grafana-add-data-source.png?raw=true)
 
 Clicking on 'Save and test' should return message that everyting is working!
 
 From the menu, click on 'import a dashboard'
+
 ![alt Grafana menu dashboard import](/grafana-menu-dashboard-import.png?raw=true)
 
 Click on 'Upload JSON' and select the 'tutorial-dashboard.json' from this folder.
 On the next window you should choose the SiriDB HTTP data source.
+
 ![alt Grafana import dashboard](/grafana-import-dashboard.png?raw=true)
 
 After clicking on 'Import' you shout see a dashboard similar to this:
+
 ![alt Grafana tutorial dashboard](/grafana-tutorial-dashboard.png?raw=true)
 
 We can now continue by expanding the database with another pool.
@@ -176,6 +181,7 @@ siridb-admin -u sa -p siri -s localhost:9002 new-pool -d tutorialdb -U iris -P s
 
 In the dashboard you should see the new server. The status for the existing servers includes 're-indexing' while
 the series are spread across the pools.
+
 ![alt Grafana re-indexing](/grafana-re-indexing.png?raw=true)
 
 Wait until the status for all three server is just 'running' and then create another replica on the fourth server for `pool 1`:
