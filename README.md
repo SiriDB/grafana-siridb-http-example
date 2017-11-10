@@ -79,14 +79,14 @@ in which case your database will perform better by using a larger shard duration
 
 > If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
 
-Create the database on the first siridb server:
+Create the database on the first siridb server which is running on port `9000`:
 
 ```
 siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration "6h"
 ```
 
 Now we have a database and we can use the default database user `iris` with password `siri` to extend the database
-with a replica on the second server:
+with a replica on the second server (running on port `9001`):
 ```
 siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 0 --force
 ```
@@ -176,7 +176,7 @@ After clicking on 'Import' you shout see a dashboard similar to this:
 
 ![alt Grafana tutorial dashboard](/png/grafana-tutorial-dashboard.png?raw=true&v=1)
 
-We can now continue by expanding the database with another pool.
+We can now continue by expanding the database with another pool and use the third server on port `9002`.
 
 ```
 siridb-admin -u sa -p siri -s localhost:9002 new-pool -d tutorialdb -U iris -P siri -S localhost:9000 --force
@@ -187,7 +187,7 @@ the series are spread across the pools.
 
 ![alt Grafana re-indexing](/png/grafana-re-indexing.png?raw=true)
 
-Wait until the status for all three server is just 'running' and then create another replica on the fourth server for `pool 1`:
+Wait until the status for all three server is just 'running' and then create another replica on the fourth server which is running on port `9003`:
 ```
 siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 1 --force
 ```
@@ -196,8 +196,9 @@ The dashboard should show the forth server with status 'synchronizing'
 ![alt Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
 
 From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
+As an example we will add two extra graphs for minotoring disk IO.
 
-It might be helpful to test some SiriDB queries. This can be done easy by using the running SiriDB HTTP webserver.
+It might be helpful to test SiriDB queries. This can be done easy by using the running SiriDB HTTP webserver.
 
 Go to http://localhost:5050. You should see the following screen:
 
@@ -205,23 +206,24 @@ Go to http://localhost:5050. You should see the following screen:
 
 Login using the default user `iris` with password `siri`.
 
-Now you have a prompt available where you can test you queries:
+Now you have a prompt available where you can test queries, for example:
 
 ![alt SiriDB HTTP list series](/png/siridb-http-list-series.png?raw=true)
 
 ![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
-Go Back to Grafana and click on `Add row` -> `Graph`.
-Now click on the new `Panel title` -> `edit`.
+Go Back to Grafana and click on ***Add row*** -> ***Graph***.
+Click on the new ***Panel title*** -> ***edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
-Now fill in `/.*disk_io_counters_read_bytes/` at 'select', choose 'max' as aggregation and select 'diffps'
+Fill in `/.*disk_io_counters_read_bytes/` as *select*, choose *max* as aggregation and select *diffps*.
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=1)
 
-On the General tab you can change the panel title to 'Disk IO counters (read bytes)'
-Repeat this steps for the write counters and then you should have the following result:
+On the General tab you can change the panel title to ***Disk IO counters (read bytes)***.
+
+Repeat this steps for the ***write*** counters and when finished you should have the following result:
 
 ![alt Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
 
