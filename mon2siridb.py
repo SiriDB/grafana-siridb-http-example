@@ -63,8 +63,24 @@ async def addsiridbdata(data, cluster, args):
         [[ts, res['series_length']]]
 
 
+async def create_groups(cluster):
+    groups = [
+        'create group `received` for /siridb-server.*received_points/',
+        'create group `selected` for /siridb-server.*selected_points/',
+        'create group `mem_usage` for /siridb-server.*mem_usage/',
+        'create group `uptime` for /siridb-server.*uptime/',
+        'create group `series` for /siridb-database.*series/',
+        'create group `points` for /siridb-database.*points/']
+    for group in groups:
+        try:
+            await cluster.query(group)
+        except QueryError:
+            pass  # ignore error if group already exists
+
+
 async def monitor(cluster, args):
     await cluster.connect()
+    await create_groups(cluster)
 
     count = args.number_of_samples if args.number_of_samples else -1;
     prefix = args.prefix.replace('%HOSTNAME%', socket.gethostname())
@@ -130,13 +146,13 @@ if __name__ == '__main__':
     parser.add_argument(
         '-d', '--database',
         type=str,
-        default='dbtest',
+        default='tutorialdb',
         help='database name')
 
     parser.add_argument(
         '-s', '--servers',
         type=str,
-        default='localhost:9000',
+        default='localhost:9000,localhost:9001',
         help='siridb server(s)')
 
     parser.add_argument(
@@ -148,13 +164,13 @@ if __name__ == '__main__':
     parser.add_argument(
         '-n', '--number-of-samples',
         type=int,
-        default=5,
+        default=0,
         help='number of samples. (when 0 the script will run forever)')
 
     parser.add_argument(
         '-i', '--interval',
         type=int,
-        default=1,
+        default=5,
         help='interval')
 
     parser.add_argument(
