@@ -214,11 +214,11 @@ Now you have a prompt available where you can test you queries:
 Go Back to Grafana and click on `Add row` -> `Graph`.
 Now click on the new `Panel title` -> `edit`.
 
-![alt Grafana graph](/grafana-add-graph.png?raw=true)
+![alt Grafana graph](/grafana-add-graph.png?raw=true&v=1)
 
 Now fill in `/.*disk_io_counters_read_bytes/` at 'select', choose 'max' as aggregation and select 'diffps'
 
-![alt Grafana read bytes](/grafana-add-read-bytes.png?raw=true)
+![alt Grafana read bytes](/grafana-add-read-bytes.png?raw=true&v=1)
 
 On the General tab you can change the panel title to 'Disk IO counters (read bytes)'
 Repeat this steps for the write counters and then you should have the following result:
