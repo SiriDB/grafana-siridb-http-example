@@ -15,7 +15,7 @@ from siridb.connector import SiriDBClient
 from siridb.connector.lib.exceptions import QueryError
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 def adddata(data, prefix, ts, func, *args, props=None, **kwargs):
@@ -43,6 +43,21 @@ def getts(time_precision):
     }[time_precision](time.time())
 
 
+async def create_groups(cluster):
+    groups = [
+        'create group `received` for /siridb-server.*received_points/',
+        'create group `selected` for /siridb-server.*selected_points/',
+        'create group `mem_usage` for /siridb-server.*mem_usage/',
+        'create group `uptime` for /siridb-server.*uptime/',
+        'create group `series` for /siridb-database.*series/',
+        'create group `points` for /siridb-database.*points/']
+    for group in groups:
+        try:
+            await cluster.query(group)
+        except QueryError:
+            pass  # ignore error if group already exists
+
+
 async def addsiridbdata(data, cluster, args):
     res = await cluster.query(
         'list servers name, '
@@ -62,21 +77,6 @@ async def addsiridbdata(data, cluster, args):
     res = await cluster.query('count series length')
     data['siridb-database-{}-points'.format(args.database)] = \
         [[ts, res['series_length']]]
-
-
-async def create_groups(cluster):
-    groups = [
-        'create group `received` for /siridb-server.*received_points/',
-        'create group `selected` for /siridb-server.*selected_points/',
-        'create group `mem_usage` for /siridb-server.*mem_usage/',
-        'create group `uptime` for /siridb-server.*uptime/',
-        'create group `series` for /siridb-database.*series/',
-        'create group `points` for /siridb-database.*points/']
-    for group in groups:
-        try:
-            await cluster.query(group)
-        except QueryError:
-            pass  # ignore error if group already exists
 
 
 async def monitor(cluster, args):

@@ -91,13 +91,13 @@ with a replica on the second server:
 siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 0 --force
 ```
 
-Ok, everything is ready to collect data. As said we use a Python script for collecting some sample data. Before you can run the python script make sure all
+Ok, everything is ready to collect data. We can almost use our Python script for collecting some sample data. Before you can run the python script make sure all
 dependencies are installed:
 ```
 pip3 install siridb-connector psutil
 ```
 
-Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you followed the toturial then the defaults should be fine.
+Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this toturial then the defaults should be fine.
 ```
 python3 mon2siridb.py > mon.log &
 ```
@@ -195,5 +195,5 @@ siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -
 The dashboard should show the forth server with status 'synchronizing'
 ![alt Grafana synchronizing](/grafana-synchronizing.png?raw=true)
 
-
+From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
 
