@@ -199,8 +199,6 @@ From this point it should be rather easy to create you own Grafana Dashboard by 
 
 It might be helpful to test some SiriDB queries. This can be done easy by using the running SiriDB HTTP webserver.
 
-> As an alternative for running wueries you could also use [SiriDB prompt](https://github.com/transceptor-technology/siridb-prompt#readme)
-
 Go to http://localhost:5050. You should see the following screen:
 
 ![alt SiriDB HTTP login](/siridb-http-login.png?raw=true)
