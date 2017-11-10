@@ -212,7 +212,7 @@ Now you have a prompt available where you can test queries, for example:
 ![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
 Go back to Grafana and click on ***Add row*** -> ***Graph***.
-Click on the new ***Panel title*** and click on ***edit***.
+Click on the new ***Panel title*** and click on ***Edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
