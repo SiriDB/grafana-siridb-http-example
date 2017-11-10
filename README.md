@@ -16,7 +16,7 @@ sudo apt install libuv1 git python3-pip
 We start with getting this documentation and Python script wight are made available in a git repository
 ```
 git clone https://github.com/transceptor-technology/grafana-siridb-http-example.git
-cd /grafana-siridb-http-example
+cd ./grafana-siridb-http-example
 ```
 
 Install SiriDB Server
@@ -25,7 +25,7 @@ wget https://github.com/transceptor-technology/siridb-server/releases/download/2
 sudo dpkg -i siridb-server_2.0.25_amd64.deb
 ```
 
-Since we don't require SiriDB to start at startup, we disable the service:
+We don't require SiriDB to start at startup so we disable the service:
 ```
 sudo systemctl disable siridb-server.service
 ```
