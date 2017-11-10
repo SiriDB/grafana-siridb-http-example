@@ -91,8 +91,7 @@ with a replica on the second server (running on port `9001`):
 siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 0 --force
 ```
 
-Ok, everything is ready to collect data. We can almost use our Python script for collecting some sample data. Before you can run the python script make sure all
-dependencies are installed:
+Ok, everything is ready to collect data (we configure the other two SiriDB servers later in this tutorial). Before starting the Python script to collect data we must install its dependencies:
 ```
 pip3 install siridb-connector psutil
 ```
