@@ -221,7 +221,7 @@ Fill in `/.*disk_io_counters_read_bytes/` as *select*, choose *max* as aggregati
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=1)
 
-On the General tab you can change the panel title to *** Disk IO counters (read bytes) ***.
+On the General tab you can change the panel title to "Disk IO counters (read bytes)".
 
 Repeat this steps for the ***write*** counters and when finished you should have the following result:
 
