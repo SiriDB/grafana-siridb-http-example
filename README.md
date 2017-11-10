@@ -211,5 +211,19 @@ Now you have a prompt available where you can test you queries:
 
 ![alt SiriDB HTTP select](/siridb-http-select.png?raw=true)
 
+Go Back to Grafana and click on `Add row` -> `Graph`.
+Now click on the new `Panel title` -> `edit`.
+
+![alt Grafana graph](/grafana-add-graph.png?raw=true)
+
+Now fill in `/.*disk_io_counters_read_bytes/` at 'select', choose 'max' as aggregation and select 'diffps'
+
+![alt Grafana read bytes](/grafana-add-read-bytes.png?raw=true)
+
+On the General tab you can change the panel title to 'Disk IO counters (read bytes)'
+Repeat this steps for the write counters and then you should have the following result:
+
+![alt Grafana disk io counters bytes](/grafana-add-read-bytes?raw=true)
+
 I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
 
