@@ -5,16 +5,7 @@ In this tutorial we use a Python script which collects some cpu, disp and memory
 SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Raspian stretch lite installation.
-
-This document is based upon:
-
-> RASPBIAN STRETCH LITE
-> Minimal image based on Debian Stretch
-> Version:September 2017
-> Release date:2017-09-07
-> Kernel version:4.9
-> Release notes:Link
-
+To be precise: Rasphian stretch lite minimal image, version:September 201
 
 Update and install Git, Pip and libuv1 by using apt.
 ```
