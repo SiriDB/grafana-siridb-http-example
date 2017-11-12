@@ -5,9 +5,8 @@ In this tutorial we use a Python script which collects some cpu, disp and memory
 SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Raspian stretch lite installation.
-To be precise: Rasphian stretch lite minimal image, version:September 201
+To be precise: Rasphian stretch lite minimal image, version:September 2017
 
-Update and install Git, Pip and libuv1 by using apt.
 ```
 sudo apt update
 sudo apt upgrade
@@ -21,7 +20,7 @@ Continue the install by installing the prerequisites
 ```
 sudo apt install libuv1 git python3-pip libpcre3-dev libuv1-dev uuid-dev
 ```
-One of the prerequisites is libcleri
+One of the prerequisites when compiling SiriDB from source is libcleri.
 ```
 git clone https://github.com/transceptor-technology/libcleri.git
 cd libcleri/Release
