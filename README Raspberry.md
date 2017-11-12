@@ -22,6 +22,7 @@ sudo apt install libuv1 git python3-pip libpcre3-dev libuv1-dev uuid-dev
 ```
 One of the prerequisites when compiling SiriDB from source is libcleri.
 ```
+cd /tmp
 git clone https://github.com/transceptor-technology/libcleri.git
 cd libcleri/Release
 make all
