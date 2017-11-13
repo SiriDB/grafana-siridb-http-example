@@ -1,8 +1,8 @@
 {
   "__inputs": [
     {
-      "name": "DS_SIRIDB_HTTP",
-      "label": "SiriDB HTTP",
+      "name": "DS_SIRIDB-HTTP",
+      "label": "SiriDB-HTTP",
       "description": "",
       "type": "datasource",
       "pluginId": "grafana-siridb-http-datasource",
@@ -66,7 +66,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -94,17 +94,25 @@
           "targets": [
             {
               "aggr": "mean",
-              "diff": true,
+              "diff": false,
+              "diffps": true,
               "group": "",
               "hide": false,
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "A",
               "target": "`net_io_counters_bytes_sent`"
             },
             {
               "aggr": "mean",
-              "diff": true,
+              "diff": false,
+              "diffps": true,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "B",
               "target": "`net_io_counters_bytes_sent`"
@@ -129,7 +137,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "Bps",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -137,7 +145,7 @@
               "show": true
             },
             {
-              "format": "short",
+              "format": "Bps",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -151,7 +159,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fill": 1,
           "id": 5,
           "legend": {
@@ -182,7 +190,11 @@
             {
               "aggr": "sum",
               "diff": true,
+              "diffps": false,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "A",
               "target": "`net_io_counters`"
@@ -241,7 +253,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -270,7 +282,11 @@
             {
               "aggr": "mean",
               "diff": false,
+              "diffps": false,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "A",
               "target": "`total_cpu_percent`"
@@ -317,7 +333,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fill": 1,
           "id": 3,
           "legend": {
@@ -348,7 +364,11 @@
             {
               "aggr": "mean",
               "diff": false,
+              "diffps": false,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "A",
               "target": "`total_disk_usage_free`"
@@ -373,7 +393,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -395,7 +415,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fill": 1,
           "id": 4,
           "legend": {
@@ -424,7 +444,11 @@
             {
               "aggr": "mean",
               "diff": false,
+              "diffps": false,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "A",
               "target": "`total_disk_usage_total`"
@@ -432,7 +456,11 @@
             {
               "aggr": "mean",
               "diff": false,
+              "diffps": false,
               "group": "",
+              "list": "servers",
+              "props": [],
+              "query": "select",
               "raw": null,
               "refId": "B",
               "target": "`total_disk_usage_used`"
@@ -457,7 +485,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -491,7 +519,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Received points during uptime",
           "fill": 1,
           "id": 7,
@@ -571,7 +599,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Selected points during uptime",
           "fill": 1,
           "id": 8,
@@ -651,7 +679,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Up-time counter",
           "fill": 1,
           "id": 9,
@@ -731,7 +759,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Memory Usage of the SiriDB process",
           "fill": 1,
           "id": 10,
@@ -761,6 +789,7 @@
             {
               "aggr": "max",
               "diff": false,
+              "diffps": false,
               "group": "",
               "list": "servers",
               "props": [],
@@ -789,7 +818,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "mbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -823,7 +852,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Number of series in each database",
           "fill": 1,
           "id": 11,
@@ -903,7 +932,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "description": "Number of points in each database",
           "fill": 1,
           "id": 12,
@@ -993,7 +1022,7 @@
       "panels": [
         {
           "columns": [],
-          "datasource": "${DS_SIRIDB_HTTP}",
+          "datasource": "${DS_SIRIDB-HTTP}",
           "fontSize": "100%",
           "id": 6,
           "links": [],
@@ -1092,7 +1121,7 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -1122,5 +1151,5 @@
   },
   "timezone": "",
   "title": "Tutorial Dashboard",
-  "version": 3
+  "version": 2
 }
