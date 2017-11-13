@@ -185,7 +185,7 @@
               "group": "",
               "raw": null,
               "refId": "A",
-              "target": "net_io_counters"
+              "target": "`net_io_counters`"
             }
           ],
           "thresholds": [],
