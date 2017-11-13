@@ -211,12 +211,19 @@ Now you have a prompt available where you can test queries, for example:
 
 ![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
+If you want to select series based on regular expressions then it is a good pratice to create a dynamic group.
+For example we create two groups:
+```
+create group `disk_io_counters_read_bytes` for /.*disk_io_counters_read_bytes/
+create group `disk_io_counters_write_bytes` for /.*disk_io_counters_write_bytes/
+```
+
 Go back to Grafana and click on ***Add row*** -> ***Graph***.
 Click on the new ***Panel title*** and click on ***Edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
-At ***select*** fill in `/.*disk_io_counters_read_bytes/`, choose ***max*** as aggregation and enable ***Diffps***.
+At ***select*** fill in ``disk_io_counters_read_bytes``, choose ***max*** as aggregation and enable ***Diffps***.
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=1)
 
