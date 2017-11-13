@@ -100,7 +100,7 @@ Start the script. The script accepts arguments which can be viewed with `python3
 python3 mon2siridb.py &> mon.log &
 ```
 
-Let's setup Grafana so we can view what we are collecting. First install Grafana:
+Let's setup Grafana so we can view what we are collecting. First download and install Grafana:
 ```
 wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.6.1_amd64.deb
 sudo dpkg -i grafana_4.6.1_amd64.deb
