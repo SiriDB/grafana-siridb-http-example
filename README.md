@@ -225,7 +225,7 @@ Click on the new ***Panel title*** and click on ***Edit***.
 
 ![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
-At ***select*** fill in ````disk_io_counters_read_bytes````, choose ***max*** as aggregation and enable ***Diffps***.
+At ***select*** fill in ``` `disk_io_counters_read_bytes` ```, choose ***max*** as aggregation and enable ***Diffps***.
 
 ![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=2)
 
