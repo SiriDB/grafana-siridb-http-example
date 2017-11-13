@@ -152,28 +152,28 @@ siridb-http -c siridb-http.conf > siridb-http.log &
 
 Open a browser and go to http://localhost:3000. You should see the following page:
 
-![alt Grafana login](/png/grafana-login.png?raw=true)
+![Grafana login](/png/grafana-login.png?raw=true)
 
 Sign-in by using username `admin` and password `admin`.
 
 Click on ***Add data source*** to create the SiriDB data source. Fill in the form like below (use `siri` as password):
 
-![alt Grafana add data source](/png/grafana-add-data-source.png?raw=true)
+![Grafana add data source](/png/grafana-add-data-source.png?raw=true)
 
 Click on ***Save and test*** should return message that everyting is working!
 
 From the menu, click on ***Dashboards*** -> ***Import***
 
-![alt Grafana menu dashboard import](/png/grafana-menu-dashboard-import.png?raw=true)
+![Grafana menu dashboard import](/png/grafana-menu-dashboard-import.png?raw=true)
 
 Click on ***Upload .json File*** and select the `tutorial-dashboard.json` from this folder.
 On the next window you should choose the SiriDB HTTP data source.
 
-![alt Grafana import dashboard](/png/grafana-import-dashboard.png?raw=true)
+![Grafana import dashboard](/png/grafana-import-dashboard.png?raw=true)
 
 After clicking on ***Import*** you shout see a dashboard similar to this:
 
-![alt Grafana tutorial dashboard](/png/grafana-tutorial-dashboard.png?raw=true&v=1)
+![Grafana tutorial dashboard](/png/grafana-tutorial-dashboard.png?raw=true&v=1)
 
 We can now continue by expanding the database with another pool and use the third server on port `9002`.
 
@@ -184,7 +184,7 @@ siridb-admin -u sa -p siri -s localhost:9002 new-pool -d tutorialdb -U iris -P s
 In the dashboard you should see the new server. The status for the existing servers includes ***re-indexing*** while
 the series are spread across the pools.
 
-![alt Grafana re-indexing](/png/grafana-re-indexing.png?raw=true)
+![Grafana re-indexing](/png/grafana-re-indexing.png?raw=true)
 
 Wait until the status for all three server is ***running*** and then create another replica on the fourth server (on port `9003`):
 ```
@@ -192,7 +192,7 @@ siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -
 ```
 
 The dashboard should show the forth server with status ***synchronizing***
-![alt Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
+![Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
 
 From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
 As an example we will add two extra graphs for Disk IO counters.
@@ -201,15 +201,15 @@ It might be helpful to test SiriDB queries. We can do this by using the running 
 
 Go to http://localhost:5050. You should see the following screen:
 
-![alt SiriDB HTTP login](/png/siridb-http-login.png?raw=true)
+![SiriDB HTTP login](/png/siridb-http-login.png?raw=true)
 
 Login using the default user `iris` with password `siri`.
 
 Now you have a prompt available where you can test queries, for example:
 
-![alt SiriDB HTTP list series](/png/siridb-http-list-series.png?raw=true)
+![SiriDB HTTP list series](/png/siridb-http-list-series.png?raw=true)
 
-![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
+![SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
 If you want to select series based on regular expression then a good pratice is to create a dynamic group.
 For the next example we create the following two groups:
@@ -218,22 +218,22 @@ create group `disk_io_counters_read_bytes` for /.*disk_io_counters_read_bytes/
 create group `disk_io_counters_write_bytes` for /.*disk_io_counters_write_bytes/
 ```
 
-![alt SiriDB HTTP create group](/png/siridb-http-create-group.png?raw=true)
+![SiriDB HTTP create group](/png/siridb-http-create-group.png?raw=true)
 
 Go back to Grafana and click on ***Add row*** -> ***Graph***.
 Click on the new ***Panel title*** and click on ***Edit***.
 
-![alt Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
+![Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
 
 At ***select*** fill in ``` `disk_io_counters_read_bytes` ```, choose ***max*** as aggregation and enable ***Diffps***.
 
-![alt Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=2)
+![Grafana read bytes](/png/grafana-add-read-bytes.png?raw=true&v=2)
 
 On the General tab you can change the panel title to "Disk IO counters (read bytes)".
 
 Repeat this steps for the ***write*** counters and when finished you should have the following result:
 
-![alt Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
+![Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
 
 I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
 
