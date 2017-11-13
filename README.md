@@ -1,7 +1,9 @@
 # Using Grafana with SiriDB
 
-The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For an attractive dashboard we need some data which we can visualize.
-In this tutorial we use a Python script that collects some cpu, disp and memory data from the localhost and some information about the running SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
+The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. [SiriDB](https://github.com/transceptor-technology/siridb-server) is an open source time series database that can be used to store any time related data. 
+
+For an attractive dashboard we need some data which we can visualize.
+In this tutorial we use a Python script that collects some cpu, disk and memory data from the localhost and some information about the running SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
 
@@ -188,10 +190,10 @@ Wait until the status for all three server is ***running*** and then create anot
 siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 1 --force
 ```
 
-The dashboard should show the forth server with status ***synchronizing***
+The dashboard should show the fourth server with status ***synchronizing***
 ![alt Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
 
-From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
+From this point on it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
 As an example we will add two extra graphs for Disk IO counters.
 
 It might be helpful to test SiriDB queries. We can do this by using the running SiriDB HTTP webserver.
@@ -208,8 +210,8 @@ Now you have a prompt available where you can test queries, for example:
 
 ![alt SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
-If you want to select series based on regular expression then a good pratice is to create a dynamic group.
-For the next example we create the following two groups:
+If you want to select series based on regular expression, then a best pratice is to create a dynamic group.
+For the current example we create the following two groups:
 ```
 create group `disk_io_counters_read_bytes` for /.*disk_io_counters_read_bytes/
 create group `disk_io_counters_write_bytes` for /.*disk_io_counters_write_bytes/
@@ -228,7 +230,7 @@ At ***select*** fill in ``` `disk_io_counters_read_bytes` ```, choose ***max*** 
 
 On the General tab you can change the panel title to "Disk IO counters (read bytes)".
 
-Repeat this step for the ***write*** counters and when you are finished you should have the following result:
+Repeat these steps for the ***write*** counters and when you are finished you should have the following result:
 
 ![alt Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
 
