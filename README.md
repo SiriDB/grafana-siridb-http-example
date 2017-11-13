@@ -1,8 +1,7 @@
 # Using Grafana with SiriDB
 
 The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. For an attractive dashboard we need some data which we can visualize.
-In this tutorial we use a Python script which collects some cpu, disp and memory data from the localhost and some imformation about the running
-SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
+In this tutorial we use a Python script that collects some cpu, disp and memory data from the localhost and some information about the running SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
 We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
 
@@ -38,7 +37,7 @@ sudo cp siridb-admin_1.1.2_linux_amd64.bin /usr/local/bin
 sudo ln -s /usr/local/bin/siridb-admin_1.1.2_linux_amd64.bin /usr/local/bin/siridb-admin
 ```
 
-There are several native clients available for communicating with SiriDB but for Grafana we will use SiriDB HTTP which
+There are several native clients available for communicating with SiriDB, for Grafana we will use SiriDB HTTP which
 provides a HTTP(S) API.
 ```
 wget https://github.com/transceptor-technology/siridb-http/releases/download/2.0.4/siridb-http_2.0.4_linux_amd64.bin
@@ -51,7 +50,7 @@ SiriDB can scale data accross multiple pools and each pool can have two servers 
 concept on a single host by running SiriDB multiple times using different ports. In a real scenario you should use
 different nodes but for now we will create four SiriDB nodes and setup two pools, each with two SiriDB servers.
 
-This will create four SiriDB configuration files:
+This action will create four SiriDB configuration files:
 ```
 for i in {0..3}; do `cat <<EOT > siridb$i.conf
 [siridb]
@@ -65,7 +64,7 @@ max_open_files = 512
 EOT` && mkdir dbpath$i; done
 ```
 
-We can start the SiriDB servers! The following command starts the four SiriDB servers in the background.
+Now we can start the SiriDB servers! The following command starts the four SiriDB servers in the background.
 ```
 for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 ```
@@ -73,9 +72,7 @@ for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 > Hint: you can view the output from a SiriDB process by using for example `cat siridb0.log` or `tail -f siridb0.log`.
 
 Now we need the SiriDB Admin tool to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
-For our tutorial we only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this databae
-because our measurement interval will be only a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day
-in which case your database will perform better by using a larger shard duration.
+For our tutorial we will only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this database because our measurement interval will only be a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day in which case your database will perform better by using a larger shard duration.
 
 > If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
 
@@ -91,12 +88,12 @@ with a replica on the second server (running on port `9001`):
 siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 0 --force
 ```
 
-Ok, everything is ready to collect data (we configure the other two SiriDB servers later in this tutorial). Before starting the Python script to collect data we must install its dependencies:
+Ok, now everything is ready to collect data (we configure the other two SiriDB servers later in this tutorial). Before we start the Python script to collect data we must install its dependencies:
 ```
 sudo pip3 install siridb-connector psutil
 ```
 
-Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this toturial then the defaults should be fine.
+Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this tutorial then the defaults should be fine.
 ```
 python3 mon2siridb.py &> mon.log &
 ```
@@ -123,7 +120,7 @@ SiriDB HTTP requires a configuration file. For more information you can view the
 https://github.com/transceptor-technology/siridb-http#readme
 
 This will create a basic configuration file which is fine for our tutorial. Note that we connect
-to both to the first and second SiriDB server for redundancy.
+to both, the first and second SiriDB server, for redundancy.
 ```
 cat <<EOT > siridb-http.conf
 [Database]
@@ -156,18 +153,18 @@ Open a browser and go to http://localhost:3000. You should see the following pag
 
 Sign-in by using username `admin` and password `admin`.
 
-Click on ***Add data source*** to create the SiriDB data source. Fill in the form like below (use `siri` as password):
+Click on ***Add data source*** to create the SiriDB data source. Fill in the form like in the picture below (use `siri` as password):
 
 ![alt Grafana add data source](/png/grafana-add-data-source.png?raw=true)
 
-Click on ***Save and test*** should return message that everyting is working!
+Click on ***Save and test*** this should return the message that everyting is working!
 
-From the menu, click on ***Dashboards*** -> ***Import***
+Go to the menu and click on ***Dashboards*** -> ***Import***
 
 ![alt Grafana menu dashboard import](/png/grafana-menu-dashboard-import.png?raw=true)
 
 Click on ***Upload .json File*** and select the `tutorial-dashboard.json` from this folder.
-On the next window you should choose the SiriDB HTTP data source.
+In the next window you should choose the SiriDB HTTP data source.
 
 ![alt Grafana import dashboard](/png/grafana-import-dashboard.png?raw=true)
 
@@ -199,11 +196,11 @@ As an example we will add two extra graphs for Disk IO counters.
 
 It might be helpful to test SiriDB queries. We can do this by using the running SiriDB HTTP webserver.
 
-Go to http://localhost:5050. You should see the following screen:
+Go to http://localhost:5050. Here you should see the following screen:
 
 ![alt SiriDB HTTP login](/png/siridb-http-login.png?raw=true)
 
-Login using the default user `iris` with password `siri`.
+Login by using the default user `iris` with password `siri`.
 
 Now you have a prompt available where you can test queries, for example:
 
@@ -231,9 +228,9 @@ At ***select*** fill in ``` `disk_io_counters_read_bytes` ```, choose ***max*** 
 
 On the General tab you can change the panel title to "Disk IO counters (read bytes)".
 
-Repeat this steps for the ***write*** counters and when finished you should have the following result:
+Repeat this step for the ***write*** counters and when you are finished you should have the following result:
 
 ![alt Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
 
-I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
+I hope this tutorial was helpful and I am looking forward to hear what you can create by using Grafana and SiriDB!
 
