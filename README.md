@@ -5,7 +5,7 @@ The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. [
 For an attractive dashboard we need some data which we can visualize.
 In this tutorial we use a Python script that collects some cpu, disk and memory data from the localhost and some information about the running SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
 
-We use a fresh Ubnutu 16.04 installation so you might want to skip some steps or change some commands according to your operating system.
+We use a fresh Ubnutu 16.04 (desktop) installation so you might want to skip some steps or change some commands according to your operating system.
 
 Update and install Git, Pip and libuv1 by using apt.
 ```
