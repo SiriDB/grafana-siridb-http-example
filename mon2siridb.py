@@ -45,6 +45,13 @@ def getts(time_precision):
 
 async def create_groups(cluster):
     groups = [
+        'create group `total_disk_usage_total` for /.*total_disk_usage_total/',
+        'create group `total_disk_usage_used` for /.*total_disk_usage_used/',
+        'create group `total_disk_usage_free` for /.*total_disk_usage_free/',
+        'create group `total_cpu_percent` for /.*total_cpu_percent/',
+        'create group `net_io_counters` for /.*net_io_counters_(errin|errout).*/'
+        'create group `net_io_counters_bytes_sent` for /.*_net_io_counters_bytes_sent/',
+        'create group `net_io_counters_bytes_recv` for /.*_net_io_counters_bytes_recv/',
         'create group `received` for /siridb-server.*received_points/',
         'create group `selected` for /siridb-server.*selected_points/',
         'create group `mem_usage` for /siridb-server.*mem_usage/',

@@ -99,7 +99,7 @@
               "hide": false,
               "raw": null,
               "refId": "A",
-              "target": "/.*_net_io_counters_bytes_recv/"
+              "target": "`net_io_counters_bytes_sent`"
             },
             {
               "aggr": "mean",
@@ -107,7 +107,7 @@
               "group": "",
               "raw": null,
               "refId": "B",
-              "target": "/.*_net_io_counters_bytes_sent/"
+              "target": "`net_io_counters_bytes_sent`"
             }
           ],
           "thresholds": [],
@@ -185,7 +185,7 @@
               "group": "",
               "raw": null,
               "refId": "A",
-              "target": "/.*net_io_counters_(errin|errout).*/"
+              "target": "net_io_counters"
             }
           ],
           "thresholds": [],
@@ -273,7 +273,7 @@
               "group": "",
               "raw": null,
               "refId": "A",
-              "target": "/.*total_cpu_percent/"
+              "target": "`total_cpu_percent`"
             }
           ],
           "thresholds": [],
@@ -351,7 +351,7 @@
               "group": "",
               "raw": null,
               "refId": "A",
-              "target": "/.*total_disk_usage_free/"
+              "target": "`total_disk_usage_free`"
             }
           ],
           "thresholds": [],
@@ -427,7 +427,7 @@
               "group": "",
               "raw": null,
               "refId": "A",
-              "target": "/.*total_disk_usage_total/"
+              "target": "`total_disk_usage_total`"
             },
             {
               "aggr": "mean",
@@ -435,7 +435,7 @@
               "group": "",
               "raw": null,
               "refId": "B",
-              "target": "/.*total_disk_usage_used/"
+              "target": "`total_disk_usage_used`"
             }
           ],
           "thresholds": [],
