@@ -33,10 +33,10 @@ sudo systemctl disable siridb-server.service
 
 SiriDB has an admin tool which can be used to create and manage databases:
 ```
-wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.2/siridb-admin_1.1.2_linux_amd64.bin
-chmod +x siridb-admin_1.1.2_linux_amd64.bin
-sudo cp siridb-admin_1.1.2_linux_amd64.bin /usr/local/bin
-sudo ln -s /usr/local/bin/siridb-admin_1.1.2_linux_amd64.bin /usr/local/bin/siridb-admin
+wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.3/siridb-admin_1.1.3_linux_amd64.bin
+chmod +x siridb-admin_1.1.3_linux_amd64.bin
+sudo cp siridb-admin_1.1.3_linux_amd64.bin /usr/local/bin
+sudo ln -s /usr/local/bin/siridb-admin_1.1.3_linux_amd64.bin /usr/local/bin/siridb-admin
 ```
 
 There are several native clients available for communicating with SiriDB, for Grafana we will use SiriDB HTTP which

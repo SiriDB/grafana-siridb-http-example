@@ -43,10 +43,10 @@ sudo cp siridb-server /usr/local/bin/siridb-server
 SiriDB has an admin tool which can be used to create and manage databases:
 ```
 cd /tmp
-wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.2/siridb-admin_1.1.2_linux_arm.bin
-chmod +x siridb-admin_1.1.2_linux_arm.bin
-sudo cp siridb-admin_1.1.2_linux_arm.bin /usr/local/bin
-sudo ln -s /usr/local/bin/siridb-admin_1.1.2_linux_arm.bin /usr/local/bin/siridb-admin
+wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.3/siridb-admin_1.1.3_linux_arm.bin
+chmod +x siridb-admin_1.1.3_linux_arm.bin
+sudo cp siridb-admin_1.1.3_linux_arm.bin /usr/local/bin
+sudo ln -s /usr/local/bin/siridb-admin_1.1.3_linux_arm.bin /usr/local/bin/siridb-admin
 ```
 
 There are several native clients available for communicating with SiriDB but for Grafana we will use SiriDB HTTP which
