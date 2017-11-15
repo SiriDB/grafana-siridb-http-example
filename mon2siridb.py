@@ -98,35 +98,40 @@ async def monitor(cluster, args):
             data = {}
             ts = getts(args.time_precision)
 
-            adddata(data, prefix, ts, 'cpu_percent', interval=args.interval)
-            adddata(data, prefix, ts, 'virtual_memory', props=[
-                'available',
-                'free',
-                'percent'])
-            adddata(data, prefix, ts, 'disk_usage', '/', props=[
-                'total',
-                'used',
-                'free',
-                'percent'])
+            if args.monitor == 'both' or args.monitor == 'psutil':
+                adddata(data, prefix, ts, 'cpu_percent', 
+                    interval=args.interval)
+                adddata(data, prefix, ts, 'virtual_memory', props=[
+                    'available',
+                    'free',
+                    'percent'])
+                adddata(data, prefix, ts, 'disk_usage', '/', props=[
+                    'total',
+                    'used',
+                    'free',
+                    'percent'])
 
-            adddata(data, prefix, ts, 'disk_io_counters', perdisk=True, props=[
-                'read_count',
-                'write_count',
-                'read_bytes',
-                'write_bytes',
-                'read_time',
-                'write_time'])
-            adddata(data, prefix, ts, 'net_io_counters', pernic=True, props=[
-                'bytes_sent',
-                'bytes_recv',
-                'packets_sent',
-                'packets_recv',
-                'errin',
-                'errout',
-                'dropin',
-                'dropout'])
-
-            await addsiridbdata(data, cluster, args)
+                adddata(data, prefix, ts, 'disk_io_counters', perdisk=True, 
+                    props=[
+                        'read_count',
+                        'write_count',
+                        'read_bytes',
+                        'write_bytes',
+                        'read_time',
+                        'write_time'])
+                adddata(data, prefix, ts, 'net_io_counters', pernic=True, 
+                    props=[
+                        'bytes_sent',
+                        'bytes_recv',
+                        'packets_sent',
+                        'packets_recv',
+                        'errin',
+                        'errout',
+                        'dropin',
+                        'dropout'])
+            if args.monitor == 'both' or args.monitor == 'siridb':
+                await addsiridbdata(data, cluster, args)
+            
             logging.info('Inserting {} series...'.format(len(data)))
             await cluster.insert(data)
             await asyncio.sleep(args.interval)
@@ -168,6 +173,12 @@ if __name__ == '__main__':
         type=str,
         default='%HOSTNAME%|',
         help='metrix prefix')
+
+    parser.add_argument(
+        '-m', '--monitor',
+        default='both',
+        choices=['both', 'psutil', 'siridb'],
+        help='monitor psutil, siridb or both')
 
     parser.add_argument(
         '-n', '--number-of-samples',
