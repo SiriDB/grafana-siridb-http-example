@@ -86,54 +86,56 @@ async def addsiridbdata(data, cluster, args):
         [[ts, res['series_length']]]
 
 
-async def monitor(cluster, args):
+async def monitor(cluster, args, prefix):
+    data = {}
+    ts = getts(args.time_precision)
+
+    if args.monitor == 'both' or args.monitor == 'psutil':
+        adddata(data, prefix, ts, 'cpu_percent', interval=args.interval)
+        adddata(data, prefix, ts, 'virtual_memory', props=[
+            'available',
+            'free',
+            'percent'])
+        adddata(data, prefix, ts, 'disk_usage', '/', props=[
+            'total',
+            'used',
+            'free',
+            'percent'])
+
+        adddata(data, prefix, ts, 'disk_io_counters', perdisk=True, props=[
+            'read_count',
+            'write_count',
+            'read_bytes',
+            'write_bytes',
+            'read_time',
+            'write_time'])
+        adddata(data, prefix, ts, 'net_io_counters', pernic=True, props=[
+            'bytes_sent',
+            'bytes_recv',
+            'packets_sent',
+            'packets_recv',
+            'errin',
+            'errout',
+            'dropin',
+            'dropout'])
+
+    if args.monitor == 'both' or args.monitor == 'siridb':
+        await addsiridbdata(data, cluster, args)
+
+    logging.info('Inserting {} series...'.format(len(data)))
+    await cluster.insert(data)
+
+
+async def schedule(cluster, args):
     await cluster.connect()
     await create_groups(cluster)
 
-    count = args.number_of_samples if args.number_of_samples else -1;
+    count = args.number_of_samples if args.number_of_samples else -1
     prefix = args.prefix.replace('%HOSTNAME%', socket.gethostname())
 
     try:
         while count:
-            data = {}
-            ts = getts(args.time_precision)
-
-            if args.monitor == 'both' or args.monitor == 'psutil':
-                adddata(data, prefix, ts, 'cpu_percent', 
-                    interval=args.interval)
-                adddata(data, prefix, ts, 'virtual_memory', props=[
-                    'available',
-                    'free',
-                    'percent'])
-                adddata(data, prefix, ts, 'disk_usage', '/', props=[
-                    'total',
-                    'used',
-                    'free',
-                    'percent'])
-
-                adddata(data, prefix, ts, 'disk_io_counters', perdisk=True, 
-                    props=[
-                        'read_count',
-                        'write_count',
-                        'read_bytes',
-                        'write_bytes',
-                        'read_time',
-                        'write_time'])
-                adddata(data, prefix, ts, 'net_io_counters', pernic=True, 
-                    props=[
-                        'bytes_sent',
-                        'bytes_recv',
-                        'packets_sent',
-                        'packets_recv',
-                        'errin',
-                        'errout',
-                        'dropin',
-                        'dropout'])
-            if args.monitor == 'both' or args.monitor == 'siridb':
-                await addsiridbdata(data, cluster, args)
-            
-            logging.info('Inserting {} series...'.format(len(data)))
-            await cluster.insert(data)
+            asyncio.ensure_future(monitor(cluster, args, prefix))
             await asyncio.sleep(args.interval)
             count -= 1
     finally:
@@ -207,4 +209,4 @@ if __name__ == '__main__':
         hostlist=[server.split(':') for server in args.servers.split(',')])
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(monitor(cluster, args))
+    loop.run_until_complete(schedule(cluster, args))
