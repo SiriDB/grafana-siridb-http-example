@@ -1,6 +1,6 @@
 # Using Grafana with SiriDB
 
-The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. [SiriDB](https://github.com/transceptor-technology/siridb-server) is an open source time series database that can be used to store any time related data.
+The goal of this blog is to setup a Grafana dashboard using the SiriDB plugin. [SiriDB](https://github.com/SiriDB/siridb-server) is an open source time series database that can be used to store any time related data.
 
 For an attractive dashboard we need some data which we can visualize.
 In this tutorial we use a Python script that collects some cpu, disk and memory data from the localhost and some information about the running SiriDB processes. All this data will be stored in a SiriDB database and by using a Grafana Dashboard we are able to monitor the data.
@@ -16,14 +16,14 @@ sudo apt install libuv1 git python3-pip
 
 We start by downloading the Python script (and this tutorial):
 ```
-git clone https://github.com/transceptor-technology/grafana-siridb-http-example.git
+git clone https://github.com/SiriDB/grafana-siridb-http-example.git
 cd ./grafana-siridb-http-example
 ```
 
 Next we install SiriDB:
 ```
-wget https://github.com/transceptor-technology/siridb-server/releases/download/2.0.25/siridb-server_2.0.25_amd64.deb
-sudo dpkg -i siridb-server_2.0.25_amd64.deb
+wget https://github.com/SiriDB/siridb-server/releases/download/2.0.26/siridb-server_2.0.26_amd64.deb
+sudo dpkg -i siridb-server_2.0.26_amd64.deb
 ```
 
 We don't require SiriDB to start at startup so we disable the service:
@@ -33,7 +33,7 @@ sudo systemctl disable siridb-server.service
 
 SiriDB has an admin tool which can be used to create and manage databases:
 ```
-wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.3/siridb-admin_1.1.3_linux_amd64.bin
+wget https://github.com/SiriDB/siridb-admin/releases/download/1.1.3/siridb-admin_1.1.3_linux_amd64.bin
 chmod +x siridb-admin_1.1.3_linux_amd64.bin
 sudo cp siridb-admin_1.1.3_linux_amd64.bin /usr/local/bin
 sudo ln -s /usr/local/bin/siridb-admin_1.1.3_linux_amd64.bin /usr/local/bin/siridb-admin
@@ -42,10 +42,10 @@ sudo ln -s /usr/local/bin/siridb-admin_1.1.3_linux_amd64.bin /usr/local/bin/siri
 There are several native clients available for communicating with SiriDB, for Grafana we will use SiriDB HTTP which
 provides a HTTP(S) API.
 ```
-wget https://github.com/transceptor-technology/siridb-http/releases/download/2.0.4/siridb-http_2.0.4_linux_amd64.bin
-chmod +x siridb-http_2.0.4_linux_amd64.bin
-sudo cp siridb-http_2.0.4_linux_amd64.bin /usr/local/bin
-sudo ln -s /usr/local/bin/siridb-http_2.0.4_linux_amd64.bin /usr/local/bin/siridb-http
+wget https://github.com/SiriDB/siridb-http/releases/download/2.0.5/siridb-http_2.0.5_linux_amd64.bin
+chmod +x siridb-http_2.0.5_linux_amd64.bin
+sudo cp siridb-http_2.0.5_linux_amd64.bin /usr/local/bin
+sudo ln -s /usr/local/bin/siridb-http_2.0.5_linux_amd64.bin /usr/local/bin/siridb-http
 ```
 
 SiriDB can scale data accross multiple pools and each pool can have two servers for redundancy. We can play with this
@@ -76,7 +76,7 @@ for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 Now we need the SiriDB Admin tool to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
 For our tutorial we will only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this database because our measurement interval will only be a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day in which case your database will perform better by using a larger shard duration.
 
-> If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
+> If you want to learn more about the admin tool, you can look at the Github page: https://github.com/SiriDB/siridb-admin#readme
 
 Create the database on the first SiriDB server which is running on port `9000`:
 
@@ -109,7 +109,7 @@ sudo dpkg -i grafana_4.6.1_amd64.deb
 And install the Grafana-SiriDB-Datasource plugin:
 ```
 sudo mkdir /var/lib/grafana/plugins/
-sudo git clone https://github.com/transceptor-technology/grafana-siridb-http-datasource.git /var/lib/grafana/plugins/grafana-siridb-http-datasource
+sudo git clone https://github.com/SiriDB/grafana-siridb-http-datasource.git /var/lib/grafana/plugins/grafana-siridb-http-datasource
 ```
 
 Start (or restart) Grafana:
@@ -119,7 +119,7 @@ sudo systemctl restart grafana-server.service
 
 Before we can use the SiriDB datasource, we also need to configure and start the SiriDB HTTP connector.
 SiriDB HTTP requires a configuration file. For more information you can view the following Github page:
-https://github.com/transceptor-technology/siridb-http#readme
+https://github.com/SiriDB/siridb-http#readme
 
 This will create a basic configuration file which is fine for our tutorial. Note that we connect
 to both, the first and second SiriDB server, for redundancy.
