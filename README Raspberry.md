@@ -29,7 +29,7 @@ make all
 sudo make install
 ```
 
-After succesvol install we can continue installing SiriDB siridb-server
+After successful install we can continue installing SiriDB siridb-server
 
 ```
 cd /tmp
@@ -40,26 +40,19 @@ make
 sudo cp siridb-server /usr/local/bin/siridb-server
 ```
 
-SiriDB has an admin tool which can be used to create and manage databases:
-```
-cd /tmp
-wget https://github.com/transceptor-technology/siridb-admin/releases/download/1.1.3/siridb-admin_1.1.3_linux_arm.bin
-chmod +x siridb-admin_1.1.3_linux_arm.bin
-sudo cp siridb-admin_1.1.3_linux_arm.bin /usr/local/bin
-sudo ln -s /usr/local/bin/siridb-admin_1.1.3_linux_arm.bin /usr/local/bin/siridb-admin
-```
+Since version 2.0.35 it is possible to use the HTTP API to create and manage databases. However it is also possible to use the [admin tool](https://github.com/SiriDB/siridb-admin) for this.
 
 There are several native clients available for communicating with SiriDB but for Grafana we will use SiriDB HTTP which
 provides a HTTP(S) API.
 ```
 cd /tmp
-wget https://github.com/transceptor-technology/siridb-http/releases/download/2.0.4/siridb-http_2.0.4_linux_arm.bin
-chmod +x siridb-http_2.0.4_linux_arm.bin
-sudo cp siridb-http_2.0.4_linux_arm.bin /usr/local/bin
-sudo ln -s /usr/local/bin/siridb-http_2.0.4_linux_arm.bin /usr/local/bin/siridb-http
+wget https://github.com/SiriDB/siridb-http/releases/download/2.0.14/siridb-http_2.0.14_linux_amd64.bin
+chmod +x siridb-http_2.0.14_linux_amd64.bin
+sudo cp siridb-http_2.0.14_linux_amd64.bin /usr/local/bin
+sudo ln -s /usr/local/bin/siridb-http_2.0.14_linux_amd64.bin /usr/local/bin/siridb-http
 ```
 
-SiriDB can scale data accross multiple pools and each pool can have two servers for redundancy. We can play with this
+SiriDB can scale data across multiple pools and each pool can have two servers for redundancy. We can play with this
 concept on a single host by running SiriDB multiple times using different ports. In a real scenario you should use
 different nodes but for now we will create four SiriDB nodes and setup two pools, each with two SiriDB servers.
 
@@ -74,6 +67,7 @@ optimize_interval = 900
 heartbeat_interval = 30
 default_db_path = ./dbpath$i
 max_open_files = 512
+http_api_port = 902$i
 EOT` && mkdir dbpath$i; done
 ```
 
@@ -83,23 +77,42 @@ for i in {0..3}; do siridb-server -c siridb$i.conf > siridb$i.log & done
 ```
 > Hint: you can view the output from a SiriDB process by using for example `cat siridb0.log` or `tail -f siridb0.log`.
 
-Now we need the SiriDB Admin tool to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
-For our tutorial we only need a database with `second` precision so we add the `-t` flag. We also select a shard duration of 6 hours for this databae
+Now we use the SiriDB HTTP API to create the actual database. SiriDB has a default service account `sa` with password `siri` which we will use.
+For our tutorial we only need a database with `second` precision. We also select a shard duration of 6 hours for this database
 because our measurement interval will be only a few seconds. Sometimes you might want to store one value per measurement in each hour or even per day
 in which case your database will perform better by using a larger shard duration.
 
-> If you want to learn more about the admin tool, you can look at the Github page: https://github.com/transceptor-technology/siridb-admin#readme
-
-Create the database on the first SiriDB server which is running on port `9000`:
+Create the database on the first SiriDB server which is running on port `9000` using curl with basic authentication:
 
 ```
-siridb-admin -u sa -p siri -s localhost:9000 new-database -d tutorialdb -t "s" --duration-num "6h"
+curl --location --request POST 'http://localhost:9020/new-database' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic c2E6c2lyaQ==' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "dbname": "tutorialdb",
+    "time_precision": "s",
+    "buffer_size": 8192,
+    "duration_num": "6h",
+    "duration_log": "3d"
+}'
 ```
 
 Now we have a database and we can use the default database user `iris` with password `siri` to extend the database
 with a replica on the second server (running on port `9001`):
 ```
-siridb-admin -u sa -p siri -s localhost:9001 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 0 --force
+curl --location --request POST 'http://localhost:9021/new-replica' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic c2E6c2lyaQ==' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "dbname": "tutorialdb",
+    "username": "iris",
+    "password": "siri",
+    "host": "localhost",
+    "port": 9000,
+    "pool": 0
+}'
 ```
 
 We start by downloading the Python script (and this tutorial):
@@ -109,30 +122,28 @@ git clone https://github.com/transceptor-technology/grafana-siridb-http-example.
 cd ./grafana-siridb-http-example
 ```
 
-
 Ok, everything is ready to collect data (we configure the other two SiriDB servers later in this tutorial). Before starting the Python script to collect data we must install its dependencies:
 ```
-sudo pip3 install siridb-connector psutil
+pip install siridb-connector psutil
 ```
 
-Start the script. The script accepts arguments which can be viewed with `python3 mon2siridb.py -h`. If you are following this toturial then the defaults should be fine.
+Start the script. The script accepts arguments which can be viewed with `python mon2siridb.py -h`. If you are following this tutorial then the defaults should be fine.
 ```
-python3 mon2siridb.py &> mon.log &
+python mon2siridb.py &> mon.log &
 ```
 
-Let's setup Grafana so we can view what we are collecting. First install Grafana:
+Let's setup Grafana so we can view what we are collecting. First download and install Grafana:
 
 ```
-sudp apt install fontconfig-config fonts-dejavu-core libfontconfig1
-cd /tmp
-wget https://github.com/fg2it/grafana-on-raspberry/releases/download/v4.6.1/grafana_4.6.1_armhf.deb
-sudo dpkg -i grafana_4.6.1_armhf.deb
+sudo apt-get install -y adduser libfontconfig1
+wget https://dl.grafana.com/oss/release/grafana_6.7.2_amd64.deb
+sudo dpkg -i grafana_6.7.2_amd64.deb
 ```
 
 And install the Grafana-SiriDB-Datasource plugin:
 ```
-sudo mkdir /var/lib/grafana/plugins/
-sudo git clone https://github.com/transceptor-technology/grafana-siridb-http-datasource.git /var/lib/grafana/plugins/grafana-siridb-http-datasource
+cd /var/lib/grafana/plugins/
+sudo git clone https://github.com/SiriDB/grafana-siridb-http-datasource.git /var/lib/grafana/plugins/grafana-siridb-http-datasource
 ```
 
 Start (or restart) Grafana:
@@ -142,7 +153,7 @@ sudo systemctl restart grafana-server.service
 
 Before we can use the SiriDB datasource, we also need to configure and start the SiriDB HTTP connector.
 SiriDB HTTP requires a configuration file. For more information you can view the following Github page:
-https://github.com/transceptor-technology/siridb-http#readme
+https://github.com/SiriDB/siridb-http#readme
 
 This will create a basic configuration file which is fine for our tutorial. Note that we connect
 to both to the first and second SiriDB server for redundancy.
@@ -182,25 +193,35 @@ Click on ***Add data source*** to create the SiriDB data source. Fill in the for
 
 ![Grafana add data source](/png/grafana-add-data-source.png?raw=true)
 
-Click on ***Save and test*** should return message that everyting is working!
+Click on ***Save and test*** should return message that everything is working!
 
 From the menu, click on ***Dashboards*** -> ***Import***
 
 ![Grafana menu dashboard import](/png/grafana-menu-dashboard-import.png?raw=true)
 
 Click on ***Upload .json File*** and select the `tutorial-dashboard.json` from this folder.
-On the next window you should choose the SiriDB HTTP data source.
+In the next window you should choose the SiriDB HTTP data source.
 
 ![Grafana import dashboard](/png/grafana-import-dashboard.png?raw=true)
 
-After clicking on ***Import*** you shout see a dashboard similar to this:
+After clicking on ***Import*** you should see a dashboard similar to this:
 
 ![Grafana tutorial dashboard](/png/grafana-tutorial-dashboard.png?raw=true&v=1)
 
 We can now continue by expanding the database with another pool and use the third server on port `9002`.
 
 ```
-siridb-admin -u sa -p siri -s localhost:9002 new-pool -d tutorialdb -U iris -P siri -S localhost:9000 --force
+curl --location --request POST 'http://localhost:9022/new-pool' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic c2E6c2lyaQ==' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "dbname": "tutorialdb",
+    "username": "iris",
+    "password": "siri",
+    "host": "localhost",
+    "port": 9000
+}'
 ```
 
 In the dashboard you should see the new server. The status for the existing servers includes ***re-indexing*** while
@@ -210,13 +231,25 @@ the series are spread across the pools.
 
 Wait until the status for all three server is ***running*** and then create another replica on the fourth server (on port `9003`):
 ```
-siridb-admin -u sa -p siri -s localhost:9003 new-replica -d tutorialdb -U iris -P siri -S localhost:9000 --pool 1 --force
+curl --location --request POST 'http://localhost:9023/new-replica' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic c2E6c2lyaQ==' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "dbname": "tutorialdb",
+    "username": "iris",
+    "password": "siri",
+    "host": "localhost",
+    "port": 9000,
+    "pool": 1
+}'
 ```
 
-The dashboard should show the forth server with status ***synchronizing***
+The dashboard should show the fourth server with status ***synchronizing***
+
 ![Grafana synchronizing](/png/grafana-synchronizing.png?raw=true)
 
-From this point it should be rather easy to create you own Grafana Dashboard by using a SiriDB database.
+From this point it should be rather easy to create your own Grafana Dashboard by using a SiriDB database.
 As an example we will add two extra graphs for Disk IO counters.
 
 It might be helpful to test SiriDB queries. We can do this by using the running SiriDB HTTP webserver.
@@ -233,8 +266,8 @@ Now you have a prompt available where you can test queries, for example:
 
 ![SiriDB HTTP select](/png/siridb-http-select.png?raw=true)
 
-If you want to select series based on regular expression then a good pratice is to create a dynamic group.
-For the next example we create the following two groups:
+If you want to select series based on regular expression, then a good practice is to create a dynamic group.
+For the current example we create the following two groups:
 ```
 create group `disk_io_counters_read_bytes` for /.*disk_io_counters_read_bytes/
 create group `disk_io_counters_write_bytes` for /.*disk_io_counters_write_bytes/
@@ -242,10 +275,9 @@ create group `disk_io_counters_write_bytes` for /.*disk_io_counters_write_bytes/
 
 ![SiriDB HTTP create group](/png/siridb-http-create-group.png?raw=true)
 
-Go back to Grafana and click on ***Add row*** -> ***Graph***.
-Click on the new ***Panel title*** and click on ***Edit***.
+Go back to Grafana and click on ***Add panel*** -> **Add Query**.
 
-![Grafana graph](/png/grafana-add-graph.png?raw=true&v=1)
+![Grafana graph](/png/grafana-add-panel.png?raw=true&v=1)
 
 At ***select*** fill in ``disk_io_counters_read_bytes``, choose ***max*** as aggregation and enable ***Diffps***.
 
@@ -253,8 +285,10 @@ At ***select*** fill in ``disk_io_counters_read_bytes``, choose ***max*** as agg
 
 On the General tab you can change the panel title to "Disk IO counters (read bytes)".
 
+![Grafana graph](/png/grafana-add-panel-add-title.png?raw=true&v=1)
+
 Repeat this steps for the ***write*** counters and when finished you should have the following result:
 
 ![Grafana disk io counters bytes](/png/grafana-disk-io-counters-bytes.png?raw=true)
 
-I Hope this tutorial was helpful and I would be glad to hear what you can create by using Grafana and SiriDB!
+I Hope this tutorial was helpful and I am looking forward to hear what you can create by using Grafana and SiriDB!
